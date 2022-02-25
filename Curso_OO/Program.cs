@@ -1277,7 +1277,7 @@ namespace Curso_OO
                     Product product = new Product(name, price);
                     list.Add(product);
                 }
-             
+            
             }
 
             Console.WriteLine();
