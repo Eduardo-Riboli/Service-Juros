@@ -1069,6 +1069,224 @@ namespace Curso_OO
             Console.WriteLine("Income for " + monthAndYear + ": " + worker.Income(year, month).ToString("F2", CultureInfo.InvariantCulture));
             */
 
+            // -------------------------------------------------------------------------
+
+            /* Exercício Envolvendo Entidades e o modo StringBuilder para escrever:
+             * Usando as entidades Post.cs e Comment.cs
+            Comment c1 = new Comment("Have a nice trip!");
+            Comment c2 = new Comment("Wow that's awesome!");
+
+            Post p1 = new Post(
+                DateTime.Parse("21/06/2018 13:05:44"),
+                "Traveling to New Zealand",
+                "I'm going to visit this wonderful country!", 
+                12);
+            p1.AddComent(c1);
+            p1.AddComent(c2);
+
+
+            Comment c3 = new Comment("Good night!");
+            Comment c4 = new Comment("May the Force be with you");
+
+            Post p2 = new Post(
+               DateTime.Parse("28/07/2018 23:14:19"),
+               "Good night guys",
+               "See you tomorrow",
+               5);
+            p2.AddComent(c3);
+            p2.AddComent(c4);
+
+            Console.WriteLine(p1);
+            Console.WriteLine(p2);
+            */
+
+            // ------------------------------------------------------------
+
+            /* Exemplo Complexo 2 de utilização de enums, entities, e classes com objetos.
+             * Entities utilizadas: Product.cs + OrderItem.cs + Ordered.cs + Client.cs
+             * Enums utilizados: OrderStatus.cs
+            Console.WriteLine("Enter client data: ");
+            Console.Write("Name: ");
+            string name = Console.ReadLine();
+            Console.Write("Email: ");
+            string email = Console.ReadLine();
+            Console.Write("Birth date (DD/MM/YYYY): ");
+            DateTime date = DateTime.Parse(Console.ReadLine());
+            Console.WriteLine("Enter order data:");
+            Console.Write("Status: ");
+            OrderStatus status = Enum.Parse<OrderStatus>(Console.ReadLine());
+
+            Client client = new Client(name, email, date);
+            Ordered ordered = new Ordered(DateTime.Now, status, client);
+
+            Console.Write("How Many items to this order? ");
+            int n = int.Parse(Console.ReadLine());
+
+            for (int i = 1; i <= n; i++)
+            {
+                Console.WriteLine($"Enter #{i} item data:");
+                Console.Write("Product name: ");
+                string nameProduct = Console.ReadLine();
+                Console.Write("Product price: ");
+                double price = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+                Console.Write("Quantity: ");
+                int quantity = int.Parse(Console.ReadLine());
+
+                Product product = new Product(nameProduct, price);
+                OrderItem orderitem = new OrderItem(quantity, price, product);
+
+                ordered.AddItem(orderitem);
+
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("Order Summary: ");
+            Console.WriteLine(ordered);
+            */
+
+            // -------------------------------------------------------------------------
+
+            /* Explicação de herança: BusinnesAccount.cs + Account.cs;*/
+
+            // -------------------------------------------------------------------------
+
+            /* UPCASTING E DOWCASTING utilizando as classes da explicação da herança junto com a saving.Account.cs
+            Account acc = new Account(1001, "Alex", 0.0);
+            BusinessAccount bacc = new BusinessAccount(1002, "Maria", 0.0, 500.0);
+
+            // UPCASTING -> Conversão da subclasse(businessAcount e SavingsAccount) para a superclasse(Account);
+
+            Account acc1 = bacc;
+            Account acc2 = new BusinessAccount(1003, "Bob", 0.0, 200.0);
+            Account acc3 = new SavingsAccount(1004, "Anna", 0.0, 0.01);
+
+            // DOWNCASTING -> Conversão da superclasse(Account) para a subclasse(businessAcount e SavingsAccount) ;
+
+            BusinessAccount acc4 = (BusinessAccount)acc2;
+            acc4.Loan(100.0);
+            // acc2.Loan(100.0) -> Erro, tem q converter Account para BusinnesAcount, como acima.
+
+            //BusinessAccount acc5 = (BusinessAccount)acc3; // -> Da erro pois BusineesAccount não se conecta com SavingsAccount
+
+            if (acc3 is BusinessAccount)
+            {
+                BusinessAccount acc6 = (BusinessAccount)acc3; 
+              //BusinessAccount acc6 = acc3 as BusinessAccount; # Outro modo de realizar
+                acc6.Loan(200.0);
+                Console.WriteLine("Loan!");
+            }
+
+            if(acc3 is SavingsAccount)
+            {
+                SavingsAccount acc6 = (SavingsAccount)acc3;
+              //SavingsAccount acc6 = acc3 as SavingsAccount; # Outro modo de realizar
+                acc6.UpdateBalance();
+                Console.WriteLine("Update!");
+            }
+            */
+
+            // ------------------------------------------------------------
+
+            /* Sobreposição, virtual, override
+            Account acc1 = new Account(1001, "Alex", 500.0);
+            Account acc2 = new SavingsAccount(1002, "Ana", 500.0, 0.01);
+
+            acc1.Withdraw(10.0);
+            acc2.Withdraw(10.0);
+
+            Console.WriteLine(acc1.Balance);
+            Console.WriteLine(acc2.Balance);
+            */
+
+            // ------------------------------------------------------------------
+
+            /* Exemplo de exercício com herança, polimorfismo e upcasting
+             * Utilizando as classes Employee.cs e OutSourcedEmployee.cs
+            List<Employee> list = new List<Employee>();
+
+            Console.Write("Enter the number of employees: ");
+            int n = int.Parse(Console.ReadLine());
+
+            for (int i = 1; i <= n; i++)
+            {
+                Console.WriteLine($"Employee #{i} data:");
+                Console.Write("Outsourced (y/n)? ");
+                char ch = char.Parse(Console.ReadLine());
+                Console.Write("Name: ");
+                string name = Console.ReadLine();
+                Console.Write("Hours: ");
+                int hours = int.Parse(Console.ReadLine());
+                Console.Write("Value per hour: ");
+                double valueperhour = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+
+                if (ch == 'y' || ch == 'Y')
+                {
+                    Console.Write("Additional charge: ");
+                    double addcharge = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+                    list.Add(new OutSourcedEmployee(name, hours, valueperhour, addcharge));
+                }
+                else
+                {
+                    list.Add(new Employee(name, hours, valueperhour));
+                }
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("Payments: ");
+            foreach (Employee emp in list)
+            {
+                Console.WriteLine(emp.Name + " - $" + emp.Payment().ToString("F2", CultureInfo.InvariantCulture));
+            }
+            */
+
+            // --------------------------------------------------------------------------------
+
+            /* Exercício de herança e polimorfismo
+             * Utilizando as classes Product.cs, ImportedProduct.cs e UsedProduct.cs
+            List<Product> list = new List<Product>();
+
+            Console.Write("Enter the number of products: ");
+            int n = int.Parse(Console.ReadLine());
+
+            for (int i = 1; i <= n; i++)
+            {
+                Console.WriteLine($"Product #{i} data:");
+                Console.Write("Common, used or imported (c/u/i)? ");
+                char choice = char.Parse(Console.ReadLine());
+                Console.Write("Name: ");
+                string name = Console.ReadLine();
+                Console.Write("Price: ");
+                double price = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+
+                if (choice == 'i' || choice == 'I')
+                {
+                    Console.Write("Customs fee: ");
+                    double customfee = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+                    ImportedProduct importedProduct = new ImportedProduct(name, price, customfee);
+                    list.Add(importedProduct);
+                }
+                else if (choice == 'u' || choice == 'U') 
+                {
+                    Console.Write("Manufacture date (DD/MM/YYYY): ");
+                    DateTime date = DateTime.Parse(Console.ReadLine());
+                    UsedProduct usedProduct = new UsedProduct(name, price, date);
+                    list.Add(usedProduct);
+                } 
+                else 
+                {
+                    Product product = new Product(name, price);
+                    list.Add(product);
+                }
+             
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("Price Tags:");
+            foreach(Product product in list)
+            {
+                Console.WriteLine(product.PriceTag());
+            }
+            */
 
 
             Console.ReadLine();
