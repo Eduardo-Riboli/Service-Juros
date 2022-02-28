@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Globalization;
 using System.Collections.Generic;
+using System.IO;
 using Curso_OO.Entities;
 using Curso_OO.Entities.Enums;
+using Curso_OO.Entities.Exceptions;
 
 namespace Curso_OO
 {
@@ -1287,6 +1289,309 @@ namespace Curso_OO
                 Console.WriteLine(product.PriceTag());
             }
             */
+
+            // ----------------------------------------------------------------------------
+
+            /* Exercício utilizando métodos abstratos
+             * Classes utilizadas: Circle.cs, Rectangle.cs e Shape.cs
+             * Enums utilizados: Color.cs
+            Console.Write("Enter the number os shapes: ");
+            int n = int.Parse(Console.ReadLine());
+
+            List<Shape> list = new List<Shape>();
+
+            for (int i = 1; i <= n; i++)
+            {
+                Console.WriteLine($"Shape #{i} data:");
+                Console.Write("Rectangle or Circle (r/c)? ");
+                char ch = char.Parse(Console.ReadLine());
+                Console.Write("Color (Black/Blue/Red): ");
+                Color color = Enum.Parse<Color>(Console.ReadLine());
+
+                if (ch == 'r')
+                {
+                    Console.Write("Width: ");
+                    double width = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+                    Console.Write("Height: ");
+                    double height = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+                    list.Add(new Rectangle(width, height, color));
+                }
+                else
+                {
+                    Console.Write("Radius: ");
+                    double radius = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+                    list.Add(new Circle(radius, color));
+                }
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("SHAPES AREA: ");
+            foreach (Shape shape in list)
+            {
+                Console.WriteLine(shape.Area().ToString("F2", CultureInfo.InvariantCulture));
+            }
+            */
+
+            // ----------------------------------------------------------------------------
+
+            /* Exemplo utilizando métodos abstratos com herança, polimorfirsmo
+             * Entities utilizadas: JuridicPerson.cs, IndividualPerson.cs e Person.cs
+            Console.Write("Enter the number of tax payers: ");
+            int n = int.Parse(Console.ReadLine());
+
+            List<Person> list = new List<Person>();
+
+            for (int i = 1; i <= n; i++)
+            {
+                Console.WriteLine($"Tax payer #{i} data: ");
+                Console.Write("Individual or company (i/c)? ");
+                char ch = char.Parse(Console.ReadLine());
+                Console.Write("Name: ");
+                string name = Console.ReadLine();
+                Console.Write("Anual Income: ");
+                double anualincome = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+
+                if (ch == 'i' || ch == 'I')
+                {
+                    Console.Write("Health expenditures: ");
+                    double health = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+                    list.Add(new IndividualPerson(name, anualincome, health));
+                }
+                else
+                {
+                    Console.Write("Number of employees: ");
+                    int number = int.Parse(Console.ReadLine());
+                    list.Add(new JuridicPerson(name, anualincome, number));
+                }
+
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("Taxes Paid");
+
+            double soma = 0;
+            foreach (Person person in list)
+            {
+                Console.WriteLine(person.Name + ": $" + person.Tax().ToString("F2", CultureInfo.InvariantCulture));
+                soma += person.Tax();
+            }
+
+            Console.WriteLine();
+            Console.Write("Total taxes: $" + soma.ToString("F2", CultureInfo.InvariantCulture));
+            */
+
+            // ------------------------------------------------------------------------------
+
+            /* Estrutura try-catch para tratamento de erros
+            try { 
+            int n1 = int.Parse(Console.ReadLine());
+            int n2 = int.Parse(Console.ReadLine());
+
+            int result = n1 / n2;
+            Console.WriteLine(result);
+            }
+            catch (DivideByZeroException) {
+
+                Console.WriteLine("Division By Zero isn't be allowed");
+
+            }
+            catch (FormatException e)
+            {
+
+                Console.WriteLine("Format error! " + e.Message);
+
+            }
+            */
+
+            // -------------------------------------------------------------------------
+
+            /* Tratamento de exceções (sempre utilizar)
+             * Entities utilizadas: Reservation.cs
+             * Exceptions utilizadas: DomainException.cs
+            try
+            {
+                Console.Write("Room number: ");
+                int number = int.Parse(Console.ReadLine());
+                Console.Write("Check-in date (dd/MM/yyyy): ");
+                DateTime checkin = DateTime.Parse(Console.ReadLine());
+                Console.Write("Check-out date (dd/MM/yyyy): ");
+                DateTime checkout = DateTime.Parse(Console.ReadLine());
+
+                Reservation reservation = new Reservation(number, checkin, checkout);
+                Console.WriteLine(reservation);
+
+                Console.WriteLine();
+                Console.WriteLine("Enter data to update the reservation:");
+                Console.Write("Check-in date (dd/MM/yyyy): ");
+                checkin = DateTime.Parse(Console.ReadLine());
+                Console.Write("Check-out date (dd/MM/yyyy): ");
+                checkout = DateTime.Parse(Console.ReadLine());
+
+                reservation.UpdateDates(checkin, checkout);
+                Console.WriteLine(reservation);
+            }
+            catch(DomainException e)
+            {
+                Console.WriteLine("Error in reservation: " + e.Message);
+            }
+            catch(FormatException e)
+            {
+                Console.WriteLine("Format error: " + e.Message);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Unexpected error: " + e.Message);
+            }
+            */
+
+            // ---------------------------------------------------------------------------
+
+            /* Exemplo completo utilizando try e catch com tratamento de erros;
+             * Entities utilizadas: Account2.cs
+             * Exceptions utilizadas: DomainException.cs
+            try { 
+            Console.WriteLine("Enter account data");
+            Console.Write("Number: ");
+            int number = int.Parse(Console.ReadLine());
+            Console.Write("Holder: ");
+            string holder = Console.ReadLine();
+            Console.Write("Initial balance: ");
+            double balance = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+            Console.Write("Withdraw limit: ");
+            double withlimit = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+
+            Account2 account2 = new Account2(number, holder, balance, withlimit);
+
+            Console.WriteLine();
+
+            Console.Write("Enter amount for withdraw: ");
+            double with = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+            account2.Withdraw(with);
+
+            Console.WriteLine(account2);
+            }
+            catch(DomainException e)
+            {
+                Console.WriteLine("Error in account: " + e.Message);
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine("Unexpected error: " + e.Message);
+            }
+            */
+
+            // ------------------------------------------------------------------------------
+
+            /* File, FileInfo e IOException
+             * File = static members
+             * FileInfo = instance members
+            string sourcePath = @"c:\Prog\file1.txt";
+            string targetPath = @"c:\Prog\file2.txt";
+
+            try
+            {
+                FileInfo fileinfo = new FileInfo(sourcePath);
+                fileinfo.CopyTo(targetPath); // copia um txt para outro txt
+                string[] lines = File.ReadAllLines(sourcePath);
+                foreach (string line in lines) // escreve no console as msg do txt
+                {
+                    Console.WriteLine(line);
+                }
+
+
+            }catch (IOException e)
+            {
+                Console.WriteLine("An error occurred");
+                Console.WriteLine(e.Message);
+            }
+            */
+
+            // ----------------------------------------------------
+
+            /* FileStram e StreamReader
+            string path = @"c:\Prog\file1.txt";
+            FileStream fs = null;
+            StreamReader sr = null;
+
+            try
+            {
+                fs = new FileStream(path, FileMode.Open);
+                sr = new StreamReader(fs);
+                // sr = File.OpenText(path) -> única linha que resume o file stream;
+                // while(!sr.EndOfStream){
+                       string line = sr.ReadLine();
+                       Console.WriteLine(line);       -> while para ler todas as linhas do arquivo.
+                }
+                string line = sr.ReadLine();
+                Console.WriteLine(line);
+            }
+            catch (IOException e)
+            {
+                Console.WriteLine("An error accurred");
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                if (sr != null) sr.Close();
+                if (fs != null) fs.Close(); -> Fechar os objetos manualmente.
+            }
+            */
+
+            // -------------------------------------------------------------------
+
+            /* Bloco using que fecha os objetos automaticamente
+            string path = @"c:\Prog\file1.txt";
+
+            try
+            {
+                // using (StreamReader sr = File.OpenText(path)) { -> Exemplo com File.
+                using (FileStream fs = new FileStream(path, FileMode.Open))
+                {
+                    using (StreamReader sr = new StreamReader(fs))
+                    {
+                        while (!sr.EndOfStream)
+                        {
+                            string line = sr.ReadLine();
+                            Console.WriteLine(line);
+                        }
+                    }
+                }
+            }
+            catch (IOException e)
+            {
+                Console.WriteLine("An error occurred");
+                Console.WriteLine(e);
+            }
+            */
+
+            // -----------------------------------------------------------------
+
+            /* Exemplo utilizando o StreamWriter
+            string sourcePath = @"c:\Prog\file1.txt";
+            string targetPath = @"c:\Prog\file2.txt";
+
+            try
+            {
+                string[] lines = File.ReadAllLines(sourcePath);
+
+                using (StreamWriter sw = File.AppendText(targetPath))
+                {
+                    foreach (string line in lines)
+                    {
+                        sw.WriteLine(line.ToUpper());
+                    }
+                }
+
+            }
+            catch (IOException e)
+            {
+                Console.WriteLine("An error occurred");
+                Console.WriteLine(e);
+            }
+            */
+
+            // ----------------------------------------------------------
+
 
 
             Console.ReadLine();
