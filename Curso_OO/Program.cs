@@ -5,6 +5,7 @@ using System.IO;
 using Curso_OO.Entities;
 using Curso_OO.Entities.Enums;
 using Curso_OO.Entities.Exceptions;
+using Curso_OO.Services;
 
 namespace Curso_OO
 {
@@ -1592,6 +1593,177 @@ namespace Curso_OO
 
             // ----------------------------------------------------------
 
+            /* Directory e DirectoryInfo
+            string path = @"c:\Prog\myfolder";
+
+            try
+            {
+                // Busca por pastas;
+                IEnumerable<string> folders = Directory.EnumerateDirectories(path, "*.*", SearchOption.AllDirectories);
+                Console.WriteLine("FOLDERS:");
+                foreach (string s in folders)
+                {
+                    Console.WriteLine(s);
+                }
+
+                // Busca por arquivos;
+                IEnumerable<string> files = Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
+                Console.WriteLine("FILES:");
+                foreach (string s in files)
+                {
+                    Console.WriteLine(s);
+                }
+
+                // Criando pasta;
+                Directory.CreateDirectory(@"c:\Prog\myfolder\newfolder");
+            }
+            catch (IOException e)
+            {
+                Console.WriteLine("An error occurred");
+                Console.WriteLine(e);
+            }
+            */
+
+            // -----------------------------------------------------------------------
+
+            /* Alguns métodos para manipular o Path
+            string path = @"c:\Prog\myfolder\file1.txt";
+
+            Console.WriteLine("DirectorySeparatorChar: " + Path.DirectorySeparatorChar);
+            Console.WriteLine("PathSeparator: " + Path.PathSeparator);
+            Console.WriteLine("GetDirectoryName: " + Path.GetDirectoryName(path));
+            Console.WriteLine("GetFileName: " + Path.GetFileName(path));
+            Console.WriteLine("GetFileNameWithoutExtension: " + Path.GetFileNameWithoutExtension(path));
+            Console.WriteLine("GetExtension: " + Path.GetExtension(path));
+            Console.WriteLine("GetFullPath: " + Path.GetFullPath(path));
+            Console.WriteLine("GetTempPath: " + Path.GetTempPath());
+            */
+
+            // ---------------------------------------------------------------------------------
+
+            /* Exercicio path
+            Console.Write("Enter file full path: ");
+            string sourceFilePath = Console.ReadLine();
+
+            try
+            {
+                string[] lines = File.ReadAllLines(sourceFilePath);
+
+                string sourceFolderPath = Path.GetDirectoryName(sourceFilePath);
+                string targetFolderPath = sourceFolderPath + @"\out";
+                string targetFilePath = targetFolderPath + @"\summary.csv";
+
+                Directory.CreateDirectory(targetFolderPath);
+
+                using (StreamWriter sw = File.AppendText(targetFilePath))
+                {
+                    foreach (string line in lines)
+                    {
+
+                        string[] fields = line.Split(',');
+                        string name = fields[0];
+                        double price = double.Parse(fields[1], CultureInfo.InvariantCulture);
+                        int quantity = int.Parse(fields[2]);
+
+                        Product prod = new Product(name, price, quantity);
+
+                        sw.WriteLine(prod.Name + "," + prod.Total().ToString("F2", CultureInfo.InvariantCulture));
+                    }
+                }
+            }
+            catch (IOException e)
+            {
+                Console.WriteLine("An error occurred");
+                Console.WriteLine(e.Message);
+            }
+            */
+
+            // -----------------------------------------------------------------------
+
+            /* Exemplo de solução s/ interface 
+             * Entities utilizadas: CarRental.cs, Invoice.cs e Vehicle.cs
+             * Services utilizadas: RentalService.cs e BrazilTaxServices.cs
+            Console.WriteLine("Enter rental data");
+            Console.Write("Car model: ");
+            string model = Console.ReadLine();
+            Console.Write("Pickup (dd/MM/yyyy hh:mm): ");
+            DateTime start = DateTime.ParseExact(Console.ReadLine(), "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
+            Console.Write("Return (dd/MM/yyyy hh:mm): ");
+            DateTime finish = DateTime.ParseExact(Console.ReadLine(), "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
+
+            CarRental carRental = new CarRental(start, finish, new Vehicle(model));
+
+            Console.Write("Enter price per hour: ");
+            double hour = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+            Console.Write("Enter price per day: ");
+            double day = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+
+            RentalService rentalService = new RentalService(hour, day);
+
+            rentalService.ProcessInvoice(carRental);
+
+            Console.WriteLine();
+            Console.WriteLine("INVOICE: ");
+            Console.WriteLine(carRental.Invoice);
+            */
+
+            // ------------------------------------------------------------------------------------
+
+            /* Exemplo de solução c/ interface 
+             * Entities utilizadas: CarRental.cs, Invoice.cs e Vehicle.cs
+             * Services utilizadas: RentalService.cs e BrazilTaxServices.cs
+            Console.WriteLine("Enter rental data");
+            Console.Write("Car model: ");
+            string model = Console.ReadLine();
+            Console.Write("Pickup (dd/MM/yyyy hh:mm): ");
+            DateTime start = DateTime.ParseExact(Console.ReadLine(), "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
+            Console.Write("Return (dd/MM/yyyy hh:mm): ");
+            DateTime finish = DateTime.ParseExact(Console.ReadLine(), "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
+
+            CarRental carRental = new CarRental(start, finish, new Vehicle(model));
+
+            Console.Write("Enter price per hour: ");
+            double hour = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+            Console.Write("Enter price per day: ");
+            double day = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+
+            RentalService rentalService = new RentalService(hour, day, new BrazilTaxServices());
+
+            rentalService.ProcessInvoice(carRental);
+
+            Console.WriteLine();
+            Console.WriteLine("INVOICE: ");
+            Console.WriteLine(carRental.Invoice);
+            */
+
+            // ------------------------------------------------------------------------------------
+
+            /* Exemplo completo de serviço
+             * Entities utilizadas: Contract.cs e Installment.cs
+             * Services utilizadas: ContractServices.cs, PayPalService.cs e OnlinePaymentService.cs
+            List<Installment> installments = new List<Installment>();   
+
+            Console.WriteLine("Enter contract data");
+            Console.Write("Number: ");
+            int number = int.Parse(Console.ReadLine());
+            Console.Write("Date (dd/MM/yyyy): ");
+            DateTime date = DateTime.ParseExact(Console.ReadLine(), "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            Console.Write("Contract Value: ");
+            double value = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+            Console.Write("Enter number od installments: ");
+            int months = int.Parse(Console.ReadLine());
+
+            Contract contract = new Contract(number, date, value);
+            ContractService contractService = new ContractService(new PayPalService());
+            contractService.ProcessContract(contract, months);
+
+            Console.WriteLine();
+            Console.WriteLine("Installments:");
+            foreach (Installment installment in contract.Installment)
+            {
+                Console.WriteLine(installment);
+            }
+            */
 
 
             Console.ReadLine();
