@@ -1,18 +1,23 @@
-﻿namespace Curso_OO.Entities
-{
-    class CarRental
-    {
-        public DateTime Start { get; set; }
-        public DateTime Finish { get; set; }
-        public Vehicle Vehicle { get; set; }
-        public Invoice Invoice { get; set; }
+using System.Globalization;
 
-        public CarRental(DateTime start, DateTime finish, Vehicle vehicle)
+namespace Curso_OO.Entities
+{
+    class Installment
+    {
+        public DateTime DueDate { get; set; }
+        public double Amount { get; set; }
+
+        public Installment(DateTime dueDate, double amount)
         {
-            Start = start;
-            Finish = finish;
-            Vehicle = vehicle;
-            Invoice = null;
+            DueDate = dueDate;
+            Amount = amount;
+        }
+
+        public override string ToString()
+        {
+            return DueDate.ToString("dd/MM/yyyy")
+                + " - " + Amount.ToString("F2", CultureInfo.InvariantCulture);
         }
     }
+
 }
